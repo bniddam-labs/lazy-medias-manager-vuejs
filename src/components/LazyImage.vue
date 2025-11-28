@@ -1,81 +1,161 @@
 <template>
-  <div>
-    <!-- Show only the last loaded thumbnail if the full-size image is not loaded -->
-    <div v-if="!imageFullSizeLoaded && lastLoadedIndex !== null">
-      <img :src="thumbnailsUrls[lastLoadedIndex]" alt="Last Loaded Thumbnail">
+  <div ref="containerRef" class="lazy-image-container">
+    <img
+      v-if="currentSrc"
+      :src="currentSrc"
+      :alt="alt"
+      :class="['lazy-image', { loaded: isFullLoaded }]"
+    />
+    <div v-else class="lazy-image-placeholder">
+      <slot name="placeholder">
+        <span class="lazy-image-spinner"></span>
+      </slot>
     </div>
-
-    <!-- Show full-size image when loaded -->
-    <img v-if="imageFullSizeLoaded" :src="imageUrl" alt="Full Image">
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, computed, onMounted } from "vue";
+<script setup lang="ts">
+import { ref, onMounted, onUnmounted, watch } from 'vue';
 
-export default defineComponent({
-  props: {
-    baseUrl: {
-      type: String,
-      required: true,
-    },
-    fileName: {
-      type: String,
-      required: true,
-    },
-  },
-  setup(props) {
-    const thumbnailSizes = [50, 100, 200, 400, 800, 1600];
-    const thumbnailsLoadedRef = ref<boolean[]>(Array(thumbnailSizes.length).fill(false));
-    const imageFullSizeLoaded = ref(false);
-    const lastLoadedIndex = ref<number | null>(null); // Store last loaded index
+export interface Props {
+  src: string;
+  alt?: string;
+  sizes?: number[];
+  rootMargin?: string;
+  threshold?: number;
+}
 
-    const thumbnailsUrls = computed(() =>
-      thumbnailSizes.map((size) => `${props.baseUrl}/${props.fileName}?size=${size}`)
-    );
-    const imageUrl = computed(() => `${props.baseUrl}/${props.fileName}`);
+const props = withDefaults(defineProps<Props>(), {
+  alt: '',
+  sizes: () => [100, 400],
+  rootMargin: '50px',
+  threshold: 0.1,
+});
 
-    onMounted(() => {
-      thumbnailSizes.forEach((size, index) => {
-        const image = new Image();
-        image.src = thumbnailsUrls.value[index];
-        image.onload = () => {
-          console.log(`Thumbnail ${size}px loaded`);
-          thumbnailsLoadedRef.value[index] = true;
-          lastLoadedIndex.value = index; // Update last loaded index
-        };
-        image.onerror = () => {
-          console.log(`Thumbnail ${size}px failed to load`);
-        };
+const containerRef = ref<HTMLElement | null>(null);
+const currentSrc = ref<string | null>(null);
+const isFullLoaded = ref(false);
+const isIntersecting = ref(false);
+const abortController = ref<AbortController | null>(null);
+
+// Build sized URL - works with any URL that accepts ?size= or adds it
+const getSizedUrl = (size: number): string => {
+  const url = new URL(props.src, window.location.origin);
+  url.searchParams.set('size', size.toString());
+  return url.toString();
+};
+
+// Preload image with abort support
+const preloadImage = (src: string, signal?: AbortSignal): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    
+    const cleanup = () => {
+      img.onload = null;
+      img.onerror = null;
+    };
+
+    if (signal) {
+      signal.addEventListener('abort', () => {
+        cleanup();
+        img.src = '';
+        reject(new DOMException('Aborted', 'AbortError'));
       });
+    }
 
-      // Load full-size image
-      const fullImage = new Image();
-      fullImage.src = imageUrl.value;
-      fullImage.onload = () => {
-        console.log("Full-size image loaded");
-        imageFullSizeLoaded.value = true;
-      };
-      fullImage.onerror = () => {
-        console.log("Full-size image failed to load");
-      };
+    img.onload = () => {
+      cleanup();
+      resolve(src);
+    };
+
+    img.onerror = () => {
+      cleanup();
+      reject(new Error(`Failed to load: ${src}`));
+    };
+
+    img.src = src;
+  });
+};
+
+// Main loading logic
+const startLoading = async () => {
+  if (abortController.value) {
+    abortController.value.abort();
+  }
+  
+  abortController.value = new AbortController();
+  const signal = abortController.value.signal;
+
+  // Start full image loading in background
+  const fullPromise = preloadImage(props.src, signal)
+    .then((src) => {
+      currentSrc.value = src;
+      isFullLoaded.value = true;
+      // Abort remaining intermediate loads
+      abortController.value?.abort();
+    })
+    .catch(() => {
+      // Ignore abort errors
     });
 
-    return {
-      thumbnailsUrls,
-      thumbnailsLoadedRef,
-      imageFullSizeLoaded,
-      imageUrl,
-      lastLoadedIndex,
-    };
-  },
+  // Progressive loading: chain intermediate sizes
+  for (const size of props.sizes) {
+    if (signal.aborted || isFullLoaded.value) break;
+
+    try {
+      const sizedUrl = getSizedUrl(size);
+      const loadedSrc = await preloadImage(sizedUrl, signal);
+      
+      // Only update if full isn't loaded yet
+      if (!isFullLoaded.value) {
+        currentSrc.value = loadedSrc;
+      }
+    } catch (error) {
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        break;
+      }
+      // Continue to next size on error
+    }
+  }
+
+  // Wait for full image if not yet loaded
+  await fullPromise;
+};
+
+// IntersectionObserver setup
+let observer: IntersectionObserver | null = null;
+
+onMounted(() => {
+  if (!containerRef.value) return;
+
+  observer = new IntersectionObserver(
+    (entries) => {
+      const entry = entries[0];
+      if (entry.isIntersecting && !isIntersecting.value) {
+        isIntersecting.value = true;
+        startLoading();
+      }
+    },
+    {
+      rootMargin: props.rootMargin,
+      threshold: props.threshold,
+    }
+  );
+
+  observer.observe(containerRef.value);
+});
+
+onUnmounted(() => {
+  observer?.disconnect();
+  abortController.value?.abort();
+});
+
+// Re-trigger loading if src changes while visible
+watch(() => props.src, () => {
+  if (isIntersecting.value) {
+    currentSrc.value = null;
+    isFullLoaded.value = false;
+    startLoading();
+  }
 });
 </script>
-
-<style scoped>
-img {
-  width: 500px;
-  height: 500px;
-  object-fit: cover;
-}
-</style>

@@ -1,21 +1,58 @@
 {
-  "name": "images-manager-front",
-  "private": true,
-  "version": "0.0.0",
+  "name": "@bniddam-labs/lazy-media-vuejs",
+  "version": "1.0.0",
+  "description": "A Vue 3 component for progressive lazy loading of images with blur-up effect",
+  "author": "Benjamin Niddam",
+  "license": "MIT",
   "type": "module",
+  "main": "dist/lazy-media.umd.cjs",
+  "module": "dist/lazy-media.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/lazy-media.js",
+      "require": "./dist/lazy-media.umd.cjs"
+    },
+    "./style.css": "./dist/lazy-media.css"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "vue",
+    "vue3",
+    "lazy-loading",
+    "image",
+    "progressive",
+    "blur-up",
+    "intersection-observer",
+    "component"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bniddam-labs/lazy-media-vuejs"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
-    "preview": "vite preview"
+    "build:lib": "vue-tsc -b && vite build --mode lib && node -e \"const fs=require('fs'); ['App.vue.d.ts','main.d.ts','vite.svg'].forEach(f => { try { fs.unlinkSync('dist/'+f) } catch {} })\"",
+    "preview": "vite preview",
+    "prepublishOnly": "pnpm run build:lib"
   },
-  "dependencies": {
-    "vue": "^3.5.13"
+  "peerDependencies": {
+    "vue": "^3.3.0"
   },
   "devDependencies": {
+    "@types/node": "^24.10.1",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/tsconfig": "^0.7.0",
     "typescript": "~5.7.2",
     "vite": "^6.2.0",
+    "vite-plugin-dts": "^4.5.0",
+    "vue": "^3.5.13",
     "vue-tsc": "^2.2.4"
   }
 }
