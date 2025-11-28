@@ -1,5 +1,5 @@
 {
-  "name": "@bniddam-labs/lazy-media-vuejs",
+  "name": "@bniddam-labs/lazy-medias-manager-vuejs",
   "version": "1.0.0",
   "description": "A Vue 3 component for progressive lazy loading of images with blur-up effect",
   "author": "Benjamin Niddam",
@@ -33,7 +33,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/bniddam-labs/lazy-media-vuejs"
+    "url": "https://github.com/bniddam-labs/lazy-medias-manager-vuejs"
   },
   "scripts": {
     "dev": "vite",

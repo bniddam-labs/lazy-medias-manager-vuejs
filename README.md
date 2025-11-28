@@ -1,6 +1,6 @@
-# @bniddam-labs/lazy-media-vuejs
+# @bniddam-labs/lazy-medias-manager-vuejs
 
-[![npm version](https://img.shields.io/npm/v/@bniddam-labs/lazy-media-vuejs.svg)](https://www.npmjs.com/package/@bniddam-labs/lazy-media-vuejs)
+[![npm version](https://img.shields.io/npm/v/@bniddam-labs/lazy-medias-manager-vuejs.svg)](https://www.npmjs.com/package/@bniddam-labs/lazy-medias-manager-vuejs)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Vue 3 components for lazy loading media (images, videos, audio, documents) using IntersectionObserver.
@@ -21,19 +21,19 @@ Vue 3 components for lazy loading media (images, videos, audio, documents) using
 
 ```bash
 # pnpm (recommended)
-pnpm add @bniddam-labs/lazy-media-vuejs
+pnpm add @bniddam-labs/lazy-medias-manager-vuejs
 
 # npm
-npm install @bniddam-labs/lazy-media-vuejs
+npm install @bniddam-labs/lazy-medias-manager-vuejs
 
 # yarn
-yarn add @bniddam-labs/lazy-media-vuejs
+yarn add @bniddam-labs/lazy-medias-manager-vuejs
 ```
 
 ### Install from GitHub
 
 ```bash
-pnpm add github:bniddam-labs/lazy-media-vuejs
+pnpm add github:bniddam-labs/lazy-medias-manager-vuejs
 ```
 
 ## 🚀 Quick Start
@@ -42,14 +42,14 @@ pnpm add github:bniddam-labs/lazy-media-vuejs
 
 ```typescript
 // main.ts
-import { createApp } from 'vue'
-import App from './App.vue'
-import LazyMediaPlugin from '@bniddam-labs/lazy-media-vuejs'
-import '@bniddam-labs/lazy-media-vuejs/style.css'
+import { createApp } from "vue";
+import App from "./App.vue";
+import LazyMediaPlugin from "@bniddam-labs/lazy-medias-manager-vuejs";
+import "@bniddam-labs/lazy-medias-manager-vuejs/style.css";
 
-const app = createApp(App)
-app.use(LazyMediaPlugin)
-app.mount('#app')
+const app = createApp(App);
+app.use(LazyMediaPlugin);
+app.mount("#app");
 ```
 
 Now use components anywhere:
@@ -67,8 +67,8 @@ Now use components anywhere:
 
 ```vue
 <script setup lang="ts">
-import { LazyImage, LazyVideo } from '@bniddam-labs/lazy-media-vuejs'
-import '@bniddam-labs/lazy-media-vuejs/style.css'
+import { LazyImage, LazyVideo } from "@bniddam-labs/lazy-medias-manager-vuejs";
+import "@bniddam-labs/lazy-medias-manager-vuejs/style.css";
 </script>
 
 <template>
@@ -85,7 +85,7 @@ import '@bniddam-labs/lazy-media-vuejs/style.css'
 Progressive image loading with blur-up effect. Loads small thumbnails first, then the full image.
 
 ```vue
-<LazyImage 
+<LazyImage
   src="https://example.com/image.jpg"
   alt="Beautiful landscape"
   :sizes="[100, 400]"
@@ -103,13 +103,13 @@ Progressive image loading with blur-up effect. Loads small thumbnails first, the
 
 #### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `src` | `string` | **required** | Full image URL. The component appends `?size=X` for thumbnails |
-| `alt` | `string` | `''` | Alt text for accessibility |
-| `sizes` | `number[]` | `[100, 400]` | Intermediate thumbnail sizes to load progressively |
-| `rootMargin` | `string` | `'50px'` | IntersectionObserver root margin (preload distance) |
-| `threshold` | `number` | `0.1` | IntersectionObserver threshold |
+| Prop         | Type       | Default      | Description                                                    |
+| ------------ | ---------- | ------------ | -------------------------------------------------------------- |
+| `src`        | `string`   | **required** | Full image URL. The component appends `?size=X` for thumbnails |
+| `alt`        | `string`   | `''`         | Alt text for accessibility                                     |
+| `sizes`      | `number[]` | `[100, 400]` | Intermediate thumbnail sizes to load progressively             |
+| `rootMargin` | `string`   | `'50px'`     | IntersectionObserver root margin (preload distance)            |
+| `threshold`  | `number`   | `0.1`        | IntersectionObserver threshold                                 |
 
 > **Note**: Works with any backend that accepts `?size=` query parameter, including `@bniddam-labs/medias-manager-nestjs`
 
@@ -120,7 +120,7 @@ Progressive image loading with blur-up effect. Loads small thumbnails first, the
 Lazy-loaded video player with poster support.
 
 ```vue
-<LazyVideo 
+<LazyVideo
   src="https://example.com/video.mp4"
   poster="https://example.com/poster.jpg"
   controls
@@ -130,30 +130,30 @@ Lazy-loaded video player with poster support.
 
 #### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `src` | `string` | **required** | Video URL |
-| `poster` | `string` | - | Poster/thumbnail image URL |
-| `alt` | `string` | `''` | Alt text for poster |
-| `controls` | `boolean` | `true` | Show video controls |
-| `autoplay` | `boolean` | `false` | Autoplay when loaded |
-| `muted` | `boolean` | `false` | Muted by default |
-| `loop` | `boolean` | `false` | Loop video |
-| `preload` | `'none' \| 'metadata' \| 'auto'` | `'metadata'` | Preload strategy |
-| `rootMargin` | `string` | `'50px'` | IntersectionObserver margin |
-| `threshold` | `number` | `0.1` | IntersectionObserver threshold |
+| Prop         | Type                             | Default      | Description                    |
+| ------------ | -------------------------------- | ------------ | ------------------------------ |
+| `src`        | `string`                         | **required** | Video URL                      |
+| `poster`     | `string`                         | -            | Poster/thumbnail image URL     |
+| `alt`        | `string`                         | `''`         | Alt text for poster            |
+| `controls`   | `boolean`                        | `true`       | Show video controls            |
+| `autoplay`   | `boolean`                        | `false`      | Autoplay when loaded           |
+| `muted`      | `boolean`                        | `false`      | Muted by default               |
+| `loop`       | `boolean`                        | `false`      | Loop video                     |
+| `preload`    | `'none' \| 'metadata' \| 'auto'` | `'metadata'` | Preload strategy               |
+| `rootMargin` | `string`                         | `'50px'`     | IntersectionObserver margin    |
+| `threshold`  | `number`                         | `0.1`        | IntersectionObserver threshold |
 
 #### Accessing the video element
 
 ```vue
 <script setup>
-import { ref } from 'vue'
+import { ref } from "vue";
 
-const videoRef = ref()
+const videoRef = ref();
 
 const play = () => {
-  videoRef.value.video.play()
-}
+  videoRef.value.video.play();
+};
 </script>
 
 <template>
@@ -169,30 +169,27 @@ const play = () => {
 Lazy-loaded audio player.
 
 ```vue
-<LazyAudio 
-  src="https://example.com/song.mp3"
-  controls
-/>
+<LazyAudio src="https://example.com/song.mp3" controls />
 ```
 
 #### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `src` | `string` | **required** | Audio URL |
-| `controls` | `boolean` | `true` | Show audio controls |
-| `autoplay` | `boolean` | `false` | Autoplay when loaded |
-| `muted` | `boolean` | `false` | Muted by default |
-| `loop` | `boolean` | `false` | Loop audio |
-| `preload` | `'none' \| 'metadata' \| 'auto'` | `'metadata'` | Preload strategy |
-| `rootMargin` | `string` | `'50px'` | IntersectionObserver margin |
-| `threshold` | `number` | `0.1` | IntersectionObserver threshold |
+| Prop         | Type                             | Default      | Description                    |
+| ------------ | -------------------------------- | ------------ | ------------------------------ |
+| `src`        | `string`                         | **required** | Audio URL                      |
+| `controls`   | `boolean`                        | `true`       | Show audio controls            |
+| `autoplay`   | `boolean`                        | `false`      | Autoplay when loaded           |
+| `muted`      | `boolean`                        | `false`      | Muted by default               |
+| `loop`       | `boolean`                        | `false`      | Loop audio                     |
+| `preload`    | `'none' \| 'metadata' \| 'auto'` | `'metadata'` | Preload strategy               |
+| `rootMargin` | `string`                         | `'50px'`     | IntersectionObserver margin    |
+| `threshold`  | `number`                         | `0.1`        | IntersectionObserver threshold |
 
 #### Accessing the audio element
 
 ```vue
 <script setup>
-const audioRef = ref()
+const audioRef = ref();
 </script>
 
 <template>
@@ -207,22 +204,19 @@ const audioRef = ref()
 Lazy-loaded document viewer (PDF, etc.) with download fallback.
 
 ```vue
-<LazyDocument 
-  src="https://example.com/report.pdf"
-  title="Annual Report 2024"
-/>
+<LazyDocument src="https://example.com/report.pdf" title="Annual Report 2024" />
 ```
 
 #### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `src` | `string` | **required** | Document URL |
-| `title` | `string` | `'Document'` | Document title for accessibility |
-| `useIframe` | `boolean` | `false` | Use `<iframe>` instead of `<object>` |
-| `downloadText` | `string` | `'Download'` | Fallback download link text |
-| `rootMargin` | `string` | `'50px'` | IntersectionObserver margin |
-| `threshold` | `number` | `0.1` | IntersectionObserver threshold |
+| Prop           | Type      | Default      | Description                          |
+| -------------- | --------- | ------------ | ------------------------------------ |
+| `src`          | `string`  | **required** | Document URL                         |
+| `title`        | `string`  | `'Document'` | Document title for accessibility     |
+| `useIframe`    | `boolean` | `false`      | Use `<iframe>` instead of `<object>` |
+| `downloadText` | `string`  | `'Download'` | Fallback download link text          |
+| `rootMargin`   | `string`  | `'50px'`     | IntersectionObserver margin          |
+| `threshold`    | `number`  | `0.1`        | IntersectionObserver threshold       |
 
 ---
 
@@ -237,13 +231,13 @@ Override these variables in your CSS to customize the default styles:
   /* Blur effect */
   --lazy-image-blur: 10px;
   --lazy-image-blur-transition: filter 0.3s ease;
-  
+
   /* Image fit */
   --lazy-image-object-fit: cover;
-  
+
   /* Placeholder */
   --lazy-image-placeholder-bg: #f0f0f0;
-  
+
   /* Spinner */
   --lazy-image-spinner-size: 24px;
   --lazy-image-spinner-color: #ddd;
@@ -295,7 +289,7 @@ Import components without the default CSS and define your own:
 
 ```typescript
 // Don't import style.css
-import { LazyImage, LazyVideo } from '@bniddam-labs/lazy-media-vuejs'
+import { LazyImage, LazyVideo } from "@bniddam-labs/lazy-medias-manager-vuejs";
 ```
 
 Then define all classes yourself:
@@ -319,44 +313,44 @@ Then define all classes yourself:
 
 ### LazyImage
 
-| Class | Description |
-|-------|-------------|
-| `.lazy-image-container` | Wrapper element |
-| `.lazy-image` | The `<img>` element |
-| `.lazy-image.loaded` | Applied when full image is loaded |
-| `.lazy-image-placeholder` | Shown before any image loads |
-| `.lazy-image-spinner` | Default loading spinner |
+| Class                     | Description                       |
+| ------------------------- | --------------------------------- |
+| `.lazy-image-container`   | Wrapper element                   |
+| `.lazy-image`             | The `<img>` element               |
+| `.lazy-image.loaded`      | Applied when full image is loaded |
+| `.lazy-image-placeholder` | Shown before any image loads      |
+| `.lazy-image-spinner`     | Default loading spinner           |
 
 ### LazyVideo
 
-| Class | Description |
-|-------|-------------|
-| `.lazy-video-container` | Wrapper element |
-| `.lazy-video` | The `<video>` element |
+| Class                     | Description              |
+| ------------------------- | ------------------------ |
+| `.lazy-video-container`   | Wrapper element          |
+| `.lazy-video`             | The `<video>` element    |
 | `.lazy-video-placeholder` | Shown before video loads |
-| `.lazy-video-poster` | Poster image |
-| `.lazy-video-icon` | Default play icon |
+| `.lazy-video-poster`      | Poster image             |
+| `.lazy-video-icon`        | Default play icon        |
 
 ### LazyAudio
 
-| Class | Description |
-|-------|-------------|
-| `.lazy-audio-container` | Wrapper element |
-| `.lazy-audio` | The `<audio>` element |
+| Class                     | Description              |
+| ------------------------- | ------------------------ |
+| `.lazy-audio-container`   | Wrapper element          |
+| `.lazy-audio`             | The `<audio>` element    |
 | `.lazy-audio-placeholder` | Shown before audio loads |
-| `.lazy-audio-icon` | Default audio icon |
+| `.lazy-audio-icon`        | Default audio icon       |
 
 ### LazyDocument
 
-| Class | Description |
-|-------|-------------|
-| `.lazy-document-container` | Wrapper element |
-| `.lazy-document-iframe` | The `<iframe>` element (if useIframe) |
-| `.lazy-document-object` | The `<object>` element |
-| `.lazy-document-placeholder` | Shown before document loads |
-| `.lazy-document-icon` | Document type icon |
-| `.lazy-document-filename` | File name display |
-| `.lazy-document-fallback` | Download link fallback |
+| Class                        | Description                           |
+| ---------------------------- | ------------------------------------- |
+| `.lazy-document-container`   | Wrapper element                       |
+| `.lazy-document-iframe`      | The `<iframe>` element (if useIframe) |
+| `.lazy-document-object`      | The `<object>` element                |
+| `.lazy-document-placeholder` | Shown before document loads           |
+| `.lazy-document-icon`        | Document type icon                    |
+| `.lazy-document-filename`    | File name display                     |
+| `.lazy-document-fallback`    | Download link fallback                |
 
 ---
 
