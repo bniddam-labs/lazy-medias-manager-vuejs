@@ -31,7 +31,7 @@ export default defineConfig(({ mode }) => {
               vue: 'Vue',
             },
             assetFileNames: (assetInfo) => {
-              if (assetInfo.name === 'style.css') return 'lazy-image.css';
+              if (assetInfo.name === 'style.css') return 'lazy-media.css';
               return assetInfo.name || 'asset';
             },
           },

@@ -65,6 +65,8 @@ Now use components anywhere:
 
 ### Local Registration (Tree-shaking)
 
+Import only the components you need — modern bundlers automatically tree-shake unused components:
+
 ```vue
 <script setup lang="ts">
 import { LazyImage, LazyVideo } from "@bniddam-labs/lazy-medias-manager-vuejs";
@@ -73,6 +75,7 @@ import "@bniddam-labs/lazy-medias-manager-vuejs/style.css";
 
 <template>
   <LazyImage src="/photo.jpg" alt="Photo" />
+  <LazyVideo src="/video.mp4" />
 </template>
 ```
 
