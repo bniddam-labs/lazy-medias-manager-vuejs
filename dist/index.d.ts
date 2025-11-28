@@ -1,0 +1,13 @@
+import { Plugin } from 'vue';
+import { default as LazyImage } from './components/LazyImage.vue';
+import { default as LazyVideo } from './components/LazyVideo.vue';
+import { default as LazyAudio } from './components/LazyAudio.vue';
+import { default as LazyDocument } from './components/LazyDocument.vue';
+export { LazyImage, LazyVideo, LazyAudio, LazyDocument };
+export type { Props as LazyImageProps } from './components/LazyImage.vue';
+export type { Props as LazyVideoProps } from './components/LazyVideo.vue';
+export type { Props as LazyAudioProps } from './components/LazyAudio.vue';
+export type { Props as LazyDocumentProps } from './components/LazyDocument.vue';
+declare const LazyMediaPlugin: Plugin;
+export { LazyMediaPlugin };
+export default LazyMediaPlugin;
