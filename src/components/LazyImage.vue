@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watch } from 'vue';
+import { onMounted, onUnmounted, ref, watch } from "vue";
 
 export interface Props {
   src: string;
@@ -24,11 +24,10 @@ export interface Props {
   rootMargin?: string;
   threshold?: number;
 }
-
 const props = withDefaults(defineProps<Props>(), {
-  alt: '',
-  sizes: () => [100, 400],
-  rootMargin: '50px',
+  alt: "",
+  sizes: () => [],
+  rootMargin: "50px",
   threshold: 0.1,
 });
 
@@ -41,7 +40,7 @@ const abortController = ref<AbortController | null>(null);
 // Build sized URL - works with any URL that accepts ?size= or adds it
 const getSizedUrl = (size: number): string => {
   const url = new URL(props.src, window.location.origin);
-  url.searchParams.set('size', size.toString());
+  url.searchParams.set("size", size.toString());
   return url.toString();
 };
 
@@ -49,17 +48,17 @@ const getSizedUrl = (size: number): string => {
 const preloadImage = (src: string, signal?: AbortSignal): Promise<string> => {
   return new Promise((resolve, reject) => {
     const img = new Image();
-    
+
     const cleanup = () => {
       img.onload = null;
       img.onerror = null;
     };
 
     if (signal) {
-      signal.addEventListener('abort', () => {
+      signal.addEventListener("abort", () => {
         cleanup();
-        img.src = '';
-        reject(new DOMException('Aborted', 'AbortError'));
+        img.src = "";
+        reject(new DOMException("Aborted", "AbortError"));
       });
     }
 
@@ -82,7 +81,7 @@ const startLoading = async () => {
   if (abortController.value) {
     abortController.value.abort();
   }
-  
+
   abortController.value = new AbortController();
   const signal = abortController.value.signal;
 
@@ -105,13 +104,13 @@ const startLoading = async () => {
     try {
       const sizedUrl = getSizedUrl(size);
       const loadedSrc = await preloadImage(sizedUrl, signal);
-      
+
       // Only update if full isn't loaded yet
       if (!isFullLoaded.value) {
         currentSrc.value = loadedSrc;
       }
     } catch (error) {
-      if (error instanceof DOMException && error.name === 'AbortError') {
+      if (error instanceof DOMException && error.name === "AbortError") {
         break;
       }
       // Continue to next size on error
@@ -151,11 +150,14 @@ onUnmounted(() => {
 });
 
 // Re-trigger loading if src changes while visible
-watch(() => props.src, () => {
-  if (isIntersecting.value) {
-    currentSrc.value = null;
-    isFullLoaded.value = false;
-    startLoading();
+watch(
+  () => props.src,
+  () => {
+    if (isIntersecting.value) {
+      currentSrc.value = null;
+      isFullLoaded.value = false;
+      startLoading();
+    }
   }
-});
+);
 </script>

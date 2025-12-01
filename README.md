@@ -19,7 +19,7 @@ Vue 3 components for lazy loading media (images, videos, audio, documents) using
 
 ## 📦 Installation
 
-```bash
+<!-- ```bash
 # pnpm (recommended)
 pnpm add @bniddam-labs/lazy-medias-manager-vuejs
 
@@ -28,7 +28,7 @@ npm install @bniddam-labs/lazy-medias-manager-vuejs
 
 # yarn
 yarn add @bniddam-labs/lazy-medias-manager-vuejs
-```
+``` -->
 
 ### Install from GitHub
 
