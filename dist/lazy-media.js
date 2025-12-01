@@ -7,7 +7,7 @@ const D = ["src", "alt"], E = {
   props: {
     src: {},
     alt: { default: "" },
-    sizes: { default: () => [100, 400] },
+    sizes: { default: () => [] },
     rootMargin: { default: "50px" },
     threshold: { default: 0.1 }
   },
@@ -59,9 +59,12 @@ const D = ["src", "alt"], E = {
     }), R(() => {
       var t;
       v == null || v.disconnect(), (t = m.value) == null || t.abort();
-    }), M(() => d.src, () => {
-      i.value && (c.value = null, p.value = !1, e());
-    }), (t, a) => (r(), s("div", {
+    }), M(
+      () => d.src,
+      () => {
+        i.value && (c.value = null, p.value = !1, e());
+      }
+    ), (t, a) => (r(), s("div", {
       ref_key: "containerRef",
       ref: u,
       class: "lazy-image-container"
