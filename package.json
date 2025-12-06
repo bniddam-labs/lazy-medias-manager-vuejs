@@ -1,6 +1,6 @@
 {
   "name": "@bniddam-labs/lazy-medias-manager-vuejs",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A Vue 3 component for progressive lazy loading of images with blur-up effect",
   "author": "Benjamin Niddam",
   "license": "MIT",
@@ -40,6 +40,7 @@
     "build": "vue-tsc -b && vite build",
     "build:lib": "vue-tsc -b && vite build --mode lib && node -e \"const fs=require('fs'); ['App.vue.d.ts','main.d.ts','vite.svg'].forEach(f => { try { fs.unlinkSync('dist/'+f) } catch {} })\"",
     "preview": "vite preview",
+    "postinstall": "pnpm run build:lib",
     "prepublishOnly": "pnpm run build:lib"
   },
   "peerDependencies": {
